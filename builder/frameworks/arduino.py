@@ -12,7 +12,7 @@ assert isdir(FRAMEWORK_DIR)
 env.Append(
     CPPDEFINES=[
         "ARDUINO_ARCH_MCS51",
-        ("ARDUINO", 10802),
+        ("ARDUINO", 10819),
         ("double", "float"),
         "USE_STDINT",
         "__PROG_TYPES_COMPAT__"
@@ -22,7 +22,7 @@ env.Append(
         join(FRAMEWORK_DIR, "cores", env.BoardConfig().get("build.core"))
     ],
 
-    LIBS=[board_config.get("build.mcu")[0:8].upper()],
+    # LIBS=[board_config.get("build.mcu")[0:8].upper()],
 
     LIBSOURCE_DIRS=[
         join(FRAMEWORK_DIR, "libraries")

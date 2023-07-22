@@ -156,6 +156,24 @@ elif upload_protocol == "ch55x":
         UPLOADCMD="$UPLOADER $UPLOADERFLAGS $BUILD_DIR/${PROGNAME}.bin",
     )
 
+    # Enter bootloader by opening CDC VCP at 1200bps
+    port = env.subst('$UPLOAD_PORT')
+    hwids = board_config.get("build.hwids")
+    hwid = ':'.join(hwids[0]).replace('0x', '') if hwids else '1209:C550'
+    if not port:
+        from platformio import util
+        ports = [sp['port'] for sp in util.get_serial_ports() if hwid == sp['hwid'].split('VID:PID=')[1][:9]]
+        if ports:
+            port = ports[0]
+            if len(ports) > 1:
+                print(f'Found multiple ports {ports} using the first one as upload port!')
+    if port:
+        print(f'Enter bootloader by opening {port} at 1200bps')
+        try:
+            __import__('serial').Serial(port, 1200).close()
+        except:
+            pass
+
     upload_actions = [
         env.VerboseAction(
             " ".join(
